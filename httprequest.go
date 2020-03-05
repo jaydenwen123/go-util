@@ -189,7 +189,6 @@ func RequestWithHeader(url string, headers map[string]string) ([]byte, string) {
 		TLSHandshakeTimeout:   120 * time.Second,
 		ResponseHeaderTimeout: 120 * time.Second,
 	}
-
 	client := &http.Client{
 		Timeout:   120 * time.Second,
 		Transport: transport,

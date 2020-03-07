@@ -8,7 +8,7 @@ import (
 //初始化目录,目录不存在则创建，如果存在则直接跳过
 func InitDir(path string) error{
 	if _, err := os.Stat(path);err!=nil && os.IsNotExist(err){
-		err = os.MkdirAll(path,os.ModePerm)
+		err = os.MkdirAll(path,0777)
 		if err!=nil{
 			logs.Error("init directory <",path,">error.",err.Error())
 			return err

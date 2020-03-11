@@ -190,13 +190,14 @@ func RequestWithHeader(url string, headers map[string]string) ([]byte, string) {
 		ResponseHeaderTimeout: 120 * time.Second,
 	}
 	client := &http.Client{
-		Timeout:   120 * time.Second,
-		Transport: transport,
+		Transport:     transport,
+		Timeout:       120 * time.Second,
 	}
 	resp, err := client.Do(request)
 	if err != nil {
 		logs.Error("http get error:", err.Error())
-		panic(err.Error())
+		//panic(err.Error())
+		return nil,""
 	}
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

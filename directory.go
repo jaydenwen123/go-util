@@ -6,15 +6,23 @@ import (
 )
 
 //初始化目录,目录不存在则创建，如果存在则直接跳过
-func InitDir(path string) error{
-	if _, err := os.Stat(path);err!=nil && os.IsNotExist(err){
-		err = os.MkdirAll(path,0777)
-		if err!=nil{
-			logs.Error("init directory <",path,">error.",err.Error())
+func InitDir(path string) error {
+	if _, err := os.Stat(path); err != nil && os.IsNotExist(err) {
+		err = os.MkdirAll(path, 0777)
+		if err != nil {
+			logs.Error("init directory <", path, ">error.", err.Error())
 			return err
 		}
-		logs.Info("init directory<",path,"> success.")
+		logs.Info("init directory<", path, "> success.")
 		return err
 	}
 	return nil
+}
+//IsExist 判断文件或者目录存在
+func IsExist(path string) bool {
+	if _, err := os.Stat(path); err != nil && os.IsNotExist(err) {
+		return false
+	} else {
+		return true
+	}
 }

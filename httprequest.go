@@ -43,6 +43,10 @@ func RequestJson(url string, headers map[string]string) string {
 	//如果需要自己设置请求头，则通过http.NewRequest
 	//resp, err := http.Get(url)
 	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		logs.Error("RequestJsonWithMethod ---> http New Request error:%s", err.Error())
+		return ""
+	}
 	//设置请求头
 	request.Header.Add("User-Agent", USER_AGENT)
 	for key, value := range headers {
@@ -78,7 +82,7 @@ func RequestJson(url string, headers map[string]string) string {
 		//logs.Info("please wait for time.there is now retrying download....")
 		//return RequestJson(url,headers)
 	}
-	data, _ := ioutil.ReadAll(resp.Body)
+	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		logs.Error("ioutil ReadAll error:", err.Error())
 		return ""
@@ -90,24 +94,35 @@ func RequestJson(url string, headers map[string]string) string {
 	return string(data)
 }
 
+//通过get发送请求，返回数据
+//第一个参数为字节数组，第二个参数为默认编码为utf-8的字符串
+func RequestJsonWithPost(url string, headers map[string]string, params string) string {
+	return RequestJsonWithMethod(url, headers, "POST", params)
+}
 
 //通过get发送请求，返回数据
 //第一个参数为字节数组，第二个参数为默认编码为utf-8的字符串
-func RequestJsonWithPost(url string, headers map[string]string,params string) string {
-	return RequestJsonWithMethod(url,headers,"POST",params)
-}
-//通过get发送请求，返回数据
-//第一个参数为字节数组，第二个参数为默认编码为utf-8的字符串
-func RequestJsonWithMethod(url string, headers map[string]string,method string,params string) string {
+func RequestJsonWithMethod(url string, headers map[string]string, method string, params string) string {
 
 	//1.发请求，获取数据
 	//如果需要自己设置请求头，则通过http.NewRequest
 	//resp, err := http.Get(url)
-	var body io.Reader
-	if len(params)>0{
-		body=strings.NewReader(params)
+	var (
+		body    io.Reader
+		err     error
+		request *http.Request
+		resp    *http.Response
+		data    []byte
+	)
+
+	if len(params) > 0 {
+		body = strings.NewReader(params)
 	}
-	request, err := http.NewRequest(method, url, body)
+	request, err = http.NewRequest(method, url, body)
+	if err != nil {
+		logs.Error("RequestJsonWithMethod ---> http New Request error:%s", err.Error())
+		return ""
+	}
 	//设置请求头
 	//request.Header.Add("User-Agent", USER_AGENT)
 	for key, value := range headers {
@@ -121,7 +136,7 @@ func RequestJsonWithMethod(url string, headers map[string]string,method string,p
 			if err != nil {
 				return nil, err
 			}
-			c.SetDeadline(deadline)
+			_ = c.SetDeadline(deadline)
 			return c, nil
 		},
 		IdleConnTimeout:       120 * time.Second,
@@ -133,7 +148,8 @@ func RequestJsonWithMethod(url string, headers map[string]string,method string,p
 		Timeout:   120 * time.Second,
 		Transport: transport,
 	}
-	resp, err := client.Do(request)
+
+	resp, err = client.Do(request)
 	if err != nil {
 		logs.Error("http get error:", err.Error())
 		//panic(err.Error())
@@ -143,7 +159,7 @@ func RequestJsonWithMethod(url string, headers map[string]string,method string,p
 		//logs.Info("please wait for time.there is now retrying download....")
 		//return RequestJson(url,headers)
 	}
-	data, _ := ioutil.ReadAll(resp.Body)
+	data, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		logs.Error("ioutil ReadAll error:", err.Error())
 		return ""
@@ -152,11 +168,9 @@ func RequestJsonWithMethod(url string, headers map[string]string,method string,p
 		logs.Error("resp Body Close error:", err.Error())
 		return ""
 	}
-	request.Close=true
+	request.Close = true
 	return string(data)
 }
-
-
 
 //通过get发送请求，返回数据
 //第一个参数为字节数组，第二个参数为默认编码为utf-8的字符串
@@ -173,9 +187,13 @@ func RequestWithHeader(url string, headers map[string]string) ([]byte, string) {
 	//如果需要自己设置请求头，则通过http.NewRequest
 	//resp, err := http.Get(url)
 	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		logs.Error("RequestWithHeader http->NewRequest error:%v", err)
+		return  nil,""
+	}
 	//设置请求头
 	request.Header.Add("User-Agent", USER_AGENT)
-	if headers!=nil{
+	if headers != nil {
 		for key, value := range headers {
 			request.Header.Add(key, value)
 		}
@@ -190,14 +208,14 @@ func RequestWithHeader(url string, headers map[string]string) ([]byte, string) {
 		ResponseHeaderTimeout: 120 * time.Second,
 	}
 	client := &http.Client{
-		Transport:     transport,
-		Timeout:       120 * time.Second,
+		Transport: transport,
+		Timeout:   120 * time.Second,
 	}
 	resp, err := client.Do(request)
 	if err != nil {
 		logs.Error("http get error:", err.Error())
 		//panic(err.Error())
-		return nil,""
+		return nil, ""
 	}
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -219,17 +237,16 @@ func ResponseWithReader(url string) io.Reader {
 	//如果需要自己设置请求头，则通过http.NewRequest
 	//resp, err := http.Get(url)
 	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		logs.Error("RequestWithHeader http->NewRequest error:%v", err)
+		return  nil
+	}
 	//设置请求头
 	request.Header.Add("User-Agent", USER_AGENT)
 	//发送请求
 	resp, err := http.DefaultClient.Do(request)
 	if err != nil {
 		logs.Error("create request error")
-		//panic(err.Error())
-		return nil
-	}
-	if err != nil {
-		logs.Error("http get error:", err.Error())
 		//panic(err.Error())
 		return nil
 	}

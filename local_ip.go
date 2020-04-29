@@ -9,15 +9,16 @@ import (
 
 const defaultNetInterfaceName = "eth1"
 
-//getLocalAddress 获取当前机器的ip地址,默认取得是eth1网卡
-func getLocalAddress() (string, error) {
-	return getLocalAddressByIterface(defaultNetInterfaceName)
+//GetLocalAddress 获取当前机器的ip地址,默认取得是eth1网卡
+func GetLocalAddress() (string, error) {
+	return GetLocalAddressByIterface(defaultNetInterfaceName)
 }
 
-func getLocalAddressByIterface(interfaceName string) (string, error) {
-	ipMap, err := getAllInterfaceIps()
+//GetLocalAddressByIterface 根据网卡名字获取ip
+func GetLocalAddressByIterface(interfaceName string) (string, error) {
+	ipMap, err := GetAllInterfaceIps()
 	if err != nil {
-		logs.Error("getAllInterfaceIps error:%s", err.Error())
+		logs.Error("GetAllInterfaceIps error:%s", err.Error())
 		return "", err
 	}
 	addrs, ok := ipMap[interfaceName]
@@ -35,7 +36,8 @@ func getLocalAddressByIterface(interfaceName string) (string, error) {
 	return "", nil
 }
 
-func getAllInterfaceIps() (map[string][]string, error) {
+//GetAllInterfaceIps 获取所有网卡的ip信息
+func GetAllInterfaceIps() (map[string][]string, error) {
 	ips := make(map[string][]string)
 	interfaces, err := net.Interfaces()
 	if err != nil {

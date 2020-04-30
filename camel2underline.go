@@ -1,4 +1,4 @@
-package kdrc_utils
+package util
 
 import (
 	"bytes"

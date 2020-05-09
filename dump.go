@@ -45,7 +45,6 @@ func Save2FormatJsonFile(vData interface{}, filename string,indent string) {
 		logs.Error("write file error:", err.Error())
 		return
 	}
-	logs.Debug("save json success")
 }
 
 //将对象转换成不带缩进格式的json字符串
@@ -54,7 +53,6 @@ func Obj2JsonStr(vData interface{}) string {
 		logs.Error("object to json error:", err.Error())
 		panic(err.Error())
 	} else {
-		logs.Debug("object to json str success")
 		return string(data)
 	}
 }
@@ -105,7 +103,6 @@ func Save2XmlFile1(vData interface{}, filename string) {
 			logs.Error("flush to xml file error:", err.Error())
 			return
 		}
-		logs.Debug("save to xml file success ")
 	}
 }
 
@@ -127,7 +124,6 @@ func Save2XmlFile2(vData interface{}, filename string) {
 		logs.Error("close file error:", err.Error())
 		return
 	}
-	logs.Debug("save to xml file success")
 }
 
 //将对象转换成不带缩进的xml字符串
@@ -137,7 +133,6 @@ func Obj2XmlStr(vData interface{}) string {
 		logs.Error("xml to byte error:", err.Error())
 		panic(err.Error())
 	}
-	logs.Debug("object to xml str success")
 	return string(data)
 }
 
@@ -148,6 +143,5 @@ func Obj2XmlStrIndent(vData interface{}, prefix, indent string) string {
 		logs.Error("xml to byte error:", err.Error())
 		panic(err.Error())
 	}
-	logs.Debug("object to xml indent str success")
 	return string(data)
 }

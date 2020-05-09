@@ -46,7 +46,7 @@ func Download(url string, filename string) error {
 
 	//1.发请求，获取数据
 	//如果需要自己设置请求头，则通过http.NewRequest
-	//resp, err := http.Get(url)
+	//resp, err := http.GetIndex(url)
 	request, err := http.NewRequest("GET", url, nil)
 	if err!=nil{
 		logs.Error("new request occurs error.",err.Error())
@@ -73,7 +73,7 @@ func Download(url string, filename string) error {
 	}
 	//
 	//
-	//resp, err := http.Get(url)
+	//resp, err := http.GetIndex(url)
 	//if err != nil {
 	//	panic(err.Error())
 	//}

@@ -41,7 +41,7 @@ func RequestJson(url string, headers map[string]string) string {
 
 	//1.发请求，获取数据
 	//如果需要自己设置请求头，则通过http.NewRequest
-	//resp, err := http.Get(url)
+	//resp, err := http.GetIndex(url)
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		logs.Error("RequestJsonWithMethod ---> http New Request error:%s", err.Error())
@@ -106,7 +106,7 @@ func RequestJsonWithMethod(url string, headers map[string]string, method string,
 
 	//1.发请求，获取数据
 	//如果需要自己设置请求头，则通过http.NewRequest
-	//resp, err := http.Get(url)
+	//resp, err := http.GetIndex(url)
 	var (
 		body    io.Reader
 		err     error
@@ -185,7 +185,7 @@ func RequestWithHeader(url string, headers map[string]string) ([]byte, string) {
 
 	//1.发请求，获取数据
 	//如果需要自己设置请求头，则通过http.NewRequest
-	//resp, err := http.Get(url)
+	//resp, err := http.GetIndex(url)
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		logs.Error("RequestWithHeader http->NewRequest error:%v", err)
@@ -235,7 +235,7 @@ func ResponseWithReader(url string) io.Reader {
 
 	//1.发请求，获取数据
 	//如果需要自己设置请求头，则通过http.NewRequest
-	//resp, err := http.Get(url)
+	//resp, err := http.GetIndex(url)
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		logs.Error("RequestWithHeader http->NewRequest error:%v", err)

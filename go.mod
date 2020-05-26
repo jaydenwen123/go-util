@@ -1,4 +1,4 @@
-module github.com/jaydenwen123/go-util
+module git.code.oa.com/jaydenwen/go-util
 
 go 1.13
 

@@ -18,6 +18,7 @@ func InitDir(path string) error {
 	}
 	return nil
 }
+
 //IsExist 判断文件或者目录存在
 func IsExist(path string) bool {
 	if _, err := os.Stat(path); err != nil && os.IsNotExist(err) {
@@ -25,4 +26,19 @@ func IsExist(path string) bool {
 	} else {
 		return true
 	}
+}
+
+//AppendData2File 追加数据到文件中
+func AppendLine2File(filename string, data string) error {
+	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+	if err != nil {
+		logs.Error("open file error:%s", err.Error())
+		return err
+	}
+	_, err = file.WriteString(data + "\n")
+	if err != nil {
+		logs.Error("write string error:%s", err.Error())
+		return err
+	}
+	return nil
 }

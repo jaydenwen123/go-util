@@ -18,3 +18,26 @@ func Bytes2Str(b []byte) string {
 func Uint82Str(u []uint8) string {
 	return *(*string)(unsafe.Pointer(&u))
 }
+
+func ByteToInt8(s []byte) []int8 {
+	d := *(*[]int8)(unsafe.Pointer(&s))
+	return d
+}
+func Int8ToByte(s []int8) []byte {
+	d := *(*[]byte)(unsafe.Pointer(&s))
+	return d
+}
+func StringToByte(s string) []byte {
+	return []byte(s)
+}
+func ByteToString(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
+}
+func StringToInt8(s string) []int8 {
+	var b []byte
+	b = []byte(s)
+	return *(*[]int8)(unsafe.Pointer(&b))
+}
+func Int8ToString(b []int8) string {
+	return ByteToString(Int8ToByte(b))
+}

@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+
+
 //Cost
 type Cost struct {
 	Start time.Time
